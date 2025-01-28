@@ -25,3 +25,13 @@ func SetUpRegisterController() *controllers.CreateUserController{
 	createService := application.NewCreateUserUseCase(userRepository)
 	return controllers.NewCreateUserController(createService)
 }
+
+func GetUserByIDController() *controllers.GetUserByIDController{
+	getByIDService := application.NewUserGetByIDUseCase(userRepository)
+	return controllers.NewGetUserByIDUseCase(getByIDService)
+}
+
+func DeleteUserController() *controllers.DeleteUserController {
+	deleteUserService := application.NewDeleteUserUseCase(userRepository)
+	return controllers.NewDeleteUserController(deleteUserService)
+}

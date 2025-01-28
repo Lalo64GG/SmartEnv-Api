@@ -18,7 +18,7 @@ var (
 
 func Connect() (*sql.DB, error){
 	once.Do(func() {
-		if err := godotenv.Load("../.env"); err != nil {
+		if err := godotenv.Load(); err != nil {
 			log.Fatalf("Error loading .env file: %v", err)
 		}
 
