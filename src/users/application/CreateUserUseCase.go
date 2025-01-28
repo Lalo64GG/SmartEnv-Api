@@ -1,31 +1,34 @@
 package application
 
 import (
+	"github.com/lalo64/SmartEnv-api/src/users/application/services"
 	"github.com/lalo64/SmartEnv-api/src/users/domain/entities"
 	"github.com/lalo64/SmartEnv-api/src/users/domain/ports"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type CreateUserUseCase struct {
 	userRepository ports.IUserRepository
+	IUserEncrypt services.IUserEncrypt
 }
 
 
-func NewCreateUserUseCase(userRepository ports.IUserRepository) *CreateUserUseCase {
-	return &CreateUserUseCase{userRepository: userRepository}
+func NewCreateUserUseCase(userRepository ports.IUserRepository, iUserEncrypt services.IUserEncrypt) *CreateUserUseCase {
+	return &CreateUserUseCase{userRepository: userRepository, IUserEncrypt: iUserEncrypt}
 }
 
 func (s *CreateUserUseCase) Run(Username, Email, password string) (entities.User, error) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+
+	encryptedPass, err := s.IUserEncrypt.Encrypt([]byte(password))
 
 	if err != nil {
-		return entities.User{}, err
+		return entities.User{}, err    
 	}
+
 
 	userCre := entities.User{
 		Username: Username,
 		Email: Email,
-		Password: string(hashedPassword),
+		Password: encryptedPass,
 	}
 
 	newUser, err := s.userRepository.Create(userCre)

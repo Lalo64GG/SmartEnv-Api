@@ -29,6 +29,7 @@ func Migrate(db *sql.DB) error {
 
 	sqlFiles := []string{
 		"config/migrations/sql/000_create_users_table.sql",
+		"config/migrations/sql/001_create_records_table.sql",
 	}
 
 	for _,file := range sqlFiles {

@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lalo64/SmartEnv-api/src/config"
 	"github.com/lalo64/SmartEnv-api/src/users/infraestructure/http/routes"
+	record "github.com/lalo64/SmartEnv-api/src/records/infraestructure/http/routes"
 )
 
 type Server struct {
@@ -37,7 +38,10 @@ func NewServer(http, port string) Server {
 
 func (s *Server) registerRoutes() {
     userRoutes := s.engine.Group("/v1/users")
+	recordRoutes := s.engine.Group("/v1/records")
 
+	
+	record.RecordRoutes(recordRoutes)
 	routes.UserRoutes(userRoutes)
 
 	

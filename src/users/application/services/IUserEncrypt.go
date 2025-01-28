@@ -1,7 +1,5 @@
 package services
 
-import()
-
-type IUserEncrypt struct {
-	Encrypt func(password string) (string, error)
+type IUserEncrypt interface {
+	Encrypt(pwd []byte) (string, error)
 }  

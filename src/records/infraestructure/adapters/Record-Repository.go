@@ -1,4 +1,4 @@
-package adaters
+package adapters
 
 import (
 	"database/sql"
@@ -54,7 +54,7 @@ func (r *RecordRepository) Create(record entities.Record) (entities.Record, erro
 func (r *RecordRepository) GetAllRecords(limit, page int64, orderBy, orderDir string ) ([]entities.Record, error) {
 	offset := limit * (page -1)
 
-	query := fmt.Sprintf("SELECT id, temperature, distance FROM records ORDER BY %s %s LIMIT ? OFFSET ?", orderBy, orderDir)
+	query := fmt.Sprintf("SELECT id, temperature, distance FROM record ORDER BY %s %s LIMIT ? OFFSET ?", orderBy, orderDir)
 	stmt, err := r.DB.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
@@ -71,7 +71,7 @@ func (r *RecordRepository) GetAllRecords(limit, page int64, orderBy, orderDir st
 	var records []entities.Record
 	for rows.Next() {
 		var record entities.Record
-		err := rows.Scan(&record.ID, record.Temperature, &record.Distance)
+		err := rows.Scan(&record.ID, &record.Temperature, &record.Distance)
 		if err != nil {
 			return nil, err
 		}
@@ -88,8 +88,8 @@ func (r *RecordRepository) GetAllRecords(limit, page int64, orderBy, orderDir st
 	return records, nil
 } 
 
-func (r *RecordRepository) GetById(id int64) (entities.Record, error) {
-	query := `SELECT id, temperature, distance FROM records WHERE id =?`
+func (r *RecordRepository) GetRecordByID(id int64) (entities.Record, error) {
+	query := `SELECT id, temperature, distance FROM record WHERE id =?`
 
     stmt, err := r.DB.Prepare(query)
 

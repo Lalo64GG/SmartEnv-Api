@@ -15,11 +15,11 @@ func NewGetAllRecordsUseCase(recordRepository ports.IRecordRepository) *GetAllRe
 }
 
 
-func (r *GetAllRecordsUseCase) Run(limit, page int64, orderBy, orderDir string) (entities.Record, error) {
+func (r *GetAllRecordsUseCase) Run(limit, page int64, orderBy, orderDir string) ([]entities.Record, error) {
 	records, err := r.RecordRepository.GetAllRecords(limit, page, orderBy, orderDir)
 
     if err != nil {
-        return entities.Record{}, err
+        return []entities.Record{}, err
     }
 
     return records, nil
