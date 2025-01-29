@@ -1,16 +1,18 @@
 package application
 
 import (
+	"github.com/lalo64/SmartEnv-api/src/records/application/services"
 	"github.com/lalo64/SmartEnv-api/src/records/domain/entities"
 	"github.com/lalo64/SmartEnv-api/src/records/domain/ports"
 )
 
 type CreateRecordUseCase struct {
 	RecordRepository ports.IRecordRepository
+	KafkaRepository services.Ikafka
 }
 
-func NewCreateRecordUseCase(recordRepositoty ports.IRecordRepository)* CreateRecordUseCase{
-	return &CreateRecordUseCase{RecordRepository: recordRepositoty}
+func NewCreateRecordUseCase(recordRepositoty ports.IRecordRepository, kafkaRepository services.Ikafka)* CreateRecordUseCase{
+	return &CreateRecordUseCase{RecordRepository: recordRepositoty, KafkaRepository: kafkaRepository}
 }
 
 
@@ -18,6 +20,12 @@ func (r *CreateRecordUseCase) Run(Temperature, Distance float64) (entities.Recor
 	record := entities.Record{
 		Temperature: Temperature,
 		Distance: Distance,
+	}
+
+	status, err := r.KafkaRepository.Producer(record)
+
+	if err != nil || !status {
+		return entities.Record{}, err
 	}
 
 	newRecord, err := r.RecordRepository.Create(record)

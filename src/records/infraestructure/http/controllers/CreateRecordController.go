@@ -6,13 +6,15 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/lalo64/SmartEnv-api/src/records/application"
+	"github.com/lalo64/SmartEnv-api/src/records/infraestructure/http/controllers/helpers"
 	"github.com/lalo64/SmartEnv-api/src/records/infraestructure/http/request"
 	"github.com/lalo64/SmartEnv-api/src/shared/responses"
 )
 
 type CreateRecordController struct {
 	RecordController *application.CreateRecordUseCase
-	Validator 	  *validator.Validate
+	Validator 	  	 *validator.Validate
+	KafkaService   	 *helpers.KafkaHelper
 }
 
 func NewCreateRecordController (recordService *application.CreateRecordUseCase) *CreateRecordController{
@@ -42,6 +44,8 @@ func (ctr *CreateRecordController) Run(ctx *gin.Context){
 		})
 		return
 	}
+
+	// ctr.KafkaService.Producer(req.Temperature, req.Distance)
 
 	record, err := ctr.RecordController.Run(req.Temperature, req.Distance)
 

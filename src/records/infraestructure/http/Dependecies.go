@@ -4,12 +4,14 @@ import (
 	"log"
 
 	"github.com/lalo64/SmartEnv-api/src/records/application"
+	"github.com/lalo64/SmartEnv-api/src/records/application/services"
 	"github.com/lalo64/SmartEnv-api/src/records/domain/ports"
-	"github.com/lalo64/SmartEnv-api/src/records/infraestructure/http/controllers"
 	"github.com/lalo64/SmartEnv-api/src/records/infraestructure/adapters"
+	"github.com/lalo64/SmartEnv-api/src/records/infraestructure/http/controllers"
 )
 
 var recordRepository ports.IRecordRepository
+var IKafkaRepository services.Ikafka
 
 func init(){
 	var err error
@@ -22,7 +24,7 @@ func init(){
 }
 
 func SetUpRegisterController() *controllers.CreateRecordController {
-	createService := application.NewCreateRecordUseCase(recordRepository)
+	createService := application.NewCreateRecordUseCase(recordRepository, IKafkaRepository)
 	return controllers.NewCreateRecordController(createService)
 }
 
