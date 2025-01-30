@@ -15,6 +15,7 @@ import (
 type CreateUserController struct {
 	CreateUserController *application.CreateUserUseCase
 	Validator            *validator.Validate
+	BcryptHelper 			 *helper.BcryptHelper
 }
 
 func NewCreateUserController(createUserService *application.CreateUserUseCase) *CreateUserController {
@@ -45,7 +46,7 @@ func (ctr *CreateUserController) Run(ctx *gin.Context) {
             return
 		}
 
-		hash, err := helper.Encrypt([]byte(req.Password))
+		hash, err := ctr.BcryptHelper.Encrypt([]byte(req.Password))
 
 		if err != nil {
 			    ctx.JSON(http.StatusInternalServerError, responses.Response{

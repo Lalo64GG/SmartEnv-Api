@@ -3,16 +3,13 @@ package helpers
 import (
 	"fmt"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
-	"github.com/lalo64/SmartEnv-api/src/records/application/services"
 	"github.com/lalo64/SmartEnv-api/src/records/domain/entities"
 )
 
-type KafkaHelper struct {
-	KafkaHelper services.Ikafka
-}
+type KafkaHelper struct {}
 
-func NewKafkaHelper(kafkaHelper services.Ikafka) *KafkaHelper {
-	return &KafkaHelper{KafkaHelper: kafkaHelper}
+func NewKafkaHelper() *KafkaHelper {
+	return &KafkaHelper{}
 }
 
 func (k *KafkaHelper) Producer(record entities.Record) (bool, error) {

@@ -8,10 +8,10 @@ import (
 
 type CreateRecordUseCase struct {
 	RecordRepository ports.IRecordRepository
-	KafkaRepository services.Ikafka
+	KafkaRepository services.KafkaService
 }
 
-func NewCreateRecordUseCase(recordRepositoty ports.IRecordRepository, kafkaRepository services.Ikafka)* CreateRecordUseCase{
+func NewCreateRecordUseCase(recordRepositoty ports.IRecordRepository, kafkaRepository services.KafkaService)* CreateRecordUseCase{
 	return &CreateRecordUseCase{RecordRepository: recordRepositoty, KafkaRepository: kafkaRepository}
 }
 

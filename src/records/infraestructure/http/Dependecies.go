@@ -11,7 +11,7 @@ import (
 )
 
 var recordRepository ports.IRecordRepository
-var IKafkaRepository services.Ikafka
+var IKafkaRepository services.KafkaService
 
 func init(){
 	var err error

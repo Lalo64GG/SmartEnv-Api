@@ -8,21 +8,22 @@ import (
 
 type CreateUserUseCase struct {
 	userRepository ports.IUserRepository
-	IUserEncrypt services.IUserEncrypt
+	BycryptService services.BcryptService
 }
 
 
-func NewCreateUserUseCase(userRepository ports.IUserRepository, iUserEncrypt services.IUserEncrypt) *CreateUserUseCase {
-	return &CreateUserUseCase{userRepository: userRepository, IUserEncrypt: iUserEncrypt}
+func NewCreateUserUseCase(userRepository ports.IUserRepository, bycryptService services.BcryptService) *CreateUserUseCase {
+	return &CreateUserUseCase{userRepository: userRepository, BycryptService: bycryptService}
 }
 
 func (s *CreateUserUseCase) Run(Username, Email, password string) (entities.User, error) {
 
-	encryptedPass, err := s.IUserEncrypt.Encrypt([]byte(password))
+	encryptedPass, err := s.BycryptService.Encrypt([]byte(password))
 
 	if err != nil {
 		return entities.User{}, err    
 	}
+	
 
 
 	userCre := entities.User{

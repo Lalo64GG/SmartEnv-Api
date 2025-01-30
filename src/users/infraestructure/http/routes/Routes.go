@@ -10,8 +10,10 @@ func UserRoutes(router *gin.RouterGroup){
 	getUserByIDController := http.GetUserByIDController()
 	deleteUserController := http.DeleteUserController()
 	checkEmailController := http.CheckEmailController()
+	authController := http.AuthController()
 
 	router.POST("/", createUserController.Run)
+	router.POST("/login", authController.Run)
 	router.GET("/:id", getUserByIDController.Run)
 	router.GET("/verificar/:email", checkEmailController.Run)
 	router.DELETE("/:id", deleteUserController.Run)

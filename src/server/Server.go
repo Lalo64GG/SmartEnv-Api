@@ -21,14 +21,13 @@ func NewServer(http, port string) Server {
 	gin.SetMode(gin.ReleaseMode)
 
 	srv := Server{
-		engine:   gin.New(),
+		engine:   gin.Default(),
 		http:     http,
 		port:     port,
 		httpAddr: http + ":" + port,
 	}
 
 	config.Connect()
-	srv.engine.Use(gin.Logger())
 	srv.engine.RedirectTrailingSlash = true
 	srv.registerRoutes()
 

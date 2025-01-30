@@ -116,3 +116,27 @@ func (r *UserRepository) DeleteUser(id int64) (bool, error) {
 
 	return true, nil
 }
+
+func (r *UserRepository) GetUserByEmail(email string) (entities.User, error) {
+	log.Printf("Buscando usuario con email: %s", email)
+	
+	query := `SELECT id, email, password FROM users WHERE email = ?`
+	stmt, err := r.DB.Prepare(query)
+	if err != nil {
+		return entities.User{}, err
+	}
+	defer stmt.Close()
+
+	row := stmt.QueryRow(email)
+
+	var user entities.User
+
+	err = row.Scan(&user.ID, &user.Email, &user.Password)
+
+	if err != nil {
+		return entities.User{}, err
+	}
+
+	return user, nil
+
+}
