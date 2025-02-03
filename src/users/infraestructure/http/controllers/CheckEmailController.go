@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -32,6 +33,8 @@ func (ctr *CheckEmailController)Run(ctx *gin.Context){
 		})
 		return 
 	}
+
+	log.Println(status)
 
 	message := ""
 	if status {

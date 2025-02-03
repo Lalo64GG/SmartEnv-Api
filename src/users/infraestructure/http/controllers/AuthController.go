@@ -7,7 +7,7 @@ import (
 	"github.com/lalo64/SmartEnv-api/src/shared/middlewares"
 	"github.com/lalo64/SmartEnv-api/src/shared/responses"
 	"github.com/lalo64/SmartEnv-api/src/users/application"
-	"github.com/lalo64/SmartEnv-api/src/users/infraestructure/http/controllers/helper"
+	"github.com/lalo64/SmartEnv-api/src/users/infraestructure/http/controllers/helpers"
 	"github.com/lalo64/SmartEnv-api/src/users/infraestructure/http/request"
 )
 
@@ -85,6 +85,9 @@ func (ctr *AuthController) Run(ctx *gin.Context) {
 		Message: "Sesión iniciada",
 		Data:   map[string]interface{}{
 			"Token": token,
+			"Id": user.ID,
+			"Email": user.Email,
+			"Username": user.Username,
 		},
 		Error:   nil,
 	})

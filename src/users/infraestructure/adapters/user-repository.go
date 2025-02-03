@@ -8,7 +8,6 @@ import (
 	"github.com/lalo64/SmartEnv-api/src/users/domain/entities"
 )
 
-
 type UserRepository struct {
 	DB *sql.DB
 }
@@ -21,7 +20,6 @@ func NewUserRepository() (*UserRepository, error) {
 
 	return &UserRepository{DB: db}, nil
 }
-
 
 func (r *UserRepository) Create(user entities.User) (entities.User, error) {
 	query := `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`
@@ -41,12 +39,12 @@ func (r *UserRepository) Create(user entities.User) (entities.User, error) {
 
 	id, err := result.LastInsertId()
 	if err != nil {
-        return entities.User{}, err
-    }
+		return entities.User{}, err
+	}
 
 	user.ID = int(id)
 	user.Password = ""
-	
+
 	return user, nil
 }
 
@@ -96,7 +94,6 @@ func (r *UserRepository) CheckEmail(email string) (bool, error) {
 	return existe, nil
 }
 
-
 func (r *UserRepository) DeleteUser(id int64) (bool, error) {
 	query := `DELETE FROM users WHERE id = ?`
 
@@ -118,9 +115,8 @@ func (r *UserRepository) DeleteUser(id int64) (bool, error) {
 }
 
 func (r *UserRepository) GetUserByEmail(email string) (entities.User, error) {
-	log.Printf("Buscando usuario con email: %s", email)
-	
-	query := `SELECT id, email, password FROM users WHERE email = ?`
+
+	query := `SELECT id, email, password, username FROM users WHERE email = ?`
 	stmt, err := r.DB.Prepare(query)
 	if err != nil {
 		return entities.User{}, err
@@ -131,7 +127,7 @@ func (r *UserRepository) GetUserByEmail(email string) (entities.User, error) {
 
 	var user entities.User
 
-	err = row.Scan(&user.ID, &user.Email, &user.Password)
+	err = row.Scan(&user.ID, &user.Email, &user.Password, &user.Username)
 
 	if err != nil {
 		return entities.User{}, err
@@ -139,4 +135,25 @@ func (r *UserRepository) GetUserByEmail(email string) (entities.User, error) {
 
 	return user, nil
 
+}
+
+func (r *UserRepository) UpdateUsername(user entities.User) (entities.User, error) {
+	query := `UPDATE users SET username = ? WHERE id = ?`
+
+	stmt, err := r.DB.Prepare(query)
+
+	if err != nil {
+		return entities.User{}, err
+	}
+
+	defer stmt.Close()
+
+	// Corregir: Pasar directamente los valores de user.ID y user.Username
+	_, err = stmt.Exec(user.Username, user.ID)
+
+	if err != nil {
+		return entities.User{}, err
+	}
+
+	return user, nil
 }

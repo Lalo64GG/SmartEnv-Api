@@ -8,7 +8,7 @@ import (
 	"github.com/lalo64/SmartEnv-api/src/users/domain/ports"
 	"github.com/lalo64/SmartEnv-api/src/users/infraestructure/adapters"
 	"github.com/lalo64/SmartEnv-api/src/users/infraestructure/http/controllers"
-	"github.com/lalo64/SmartEnv-api/src/users/infraestructure/http/controllers/helper"
+	"github.com/lalo64/SmartEnv-api/src/users/infraestructure/http/controllers/helpers"
 )
 
 var (
@@ -55,4 +55,9 @@ func CheckEmailController() *controllers.CheckEmailController {
 func AuthController() *controllers.AuthController {
 	authUseCase := application.NewAuthUseCase(userRepository)
     return controllers.NewAuthController(authUseCase)
+}
+
+func SetUpUpdateUserController() *controllers.UpdateController {
+    updateUserUseCase := application.NewUpdateUserUseCase(userRepository)
+    return controllers.NewUpdateController(updateUserUseCase)
 }

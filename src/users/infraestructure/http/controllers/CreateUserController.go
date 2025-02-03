@@ -8,7 +8,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/lalo64/SmartEnv-api/src/shared/responses"
 	"github.com/lalo64/SmartEnv-api/src/users/application"
-	"github.com/lalo64/SmartEnv-api/src/users/infraestructure/http/controllers/helper"
+	"github.com/lalo64/SmartEnv-api/src/users/infraestructure/http/controllers/helpers"
 	"github.com/lalo64/SmartEnv-api/src/users/infraestructure/http/request"
 )
 

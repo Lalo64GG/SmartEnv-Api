@@ -8,4 +8,5 @@ type IUserRepository interface {
 	CheckEmail(email string) (bool, error)
 	DeleteUser(id int64) (bool, error)
 	GetUserByEmail(email string) (entities.User, error)
+	UpdateUsername(entities.User) (entities.User, error)
 }

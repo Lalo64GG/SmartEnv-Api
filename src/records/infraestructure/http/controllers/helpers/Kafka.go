@@ -23,10 +23,10 @@ func (k *KafkaHelper) Producer(record entities.Record) (bool, error) {
 	}
 	defer p.Close()
 
-	// Canal para recibir el resultado de la entrega
+	//* Canal para recibir el resultado de la entrega
 	resultChan := make(chan bool)
 
-	// Goroutine para manejar los eventos de entrega
+	//* Goroutine para manejar los eventos de entrega
 	go func() {
 		for e := range p.Events() {
 			switch ev := e.(type) {
