@@ -47,7 +47,7 @@ func (ctr *CreateRecordController) Run(ctx *gin.Context){
 
 	// ctr.KafkaService.Producer(req.Temperature, req.Distance)
 
-	record, err := ctr.RecordController.Run(req.Temperature, req.Distance)
+	record, err := ctr.RecordController.Run(req.Temperature, req.Humedity, req.Gas_level)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, responses.Response{

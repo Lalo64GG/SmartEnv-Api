@@ -24,7 +24,7 @@ func NewRecordRepository() (*RecordRepository, error) {
 
 
 func (r *RecordRepository) Create(record entities.Record) (entities.Record, error) {
-	query := `INSERT INTO record (temperature, distance) VALUES (?, ?)`
+	query := `INSERT INTO record (temperature, humidity, gas_level) VALUES (?, ?)`
 
 	stmt, err := r.DB.Prepare(query)
 
@@ -33,7 +33,7 @@ func (r *RecordRepository) Create(record entities.Record) (entities.Record, erro
 	}
 	defer stmt.Close()
 
-	result, err := stmt.Exec(record.Temperature, record.Distance)
+	result, err := stmt.Exec(record.Temperature, record.Humidity, record.Gas_level)
 
 	if err != nil {
 		return entities.Record{}, err
@@ -54,7 +54,7 @@ func (r *RecordRepository) Create(record entities.Record) (entities.Record, erro
 func (r *RecordRepository) GetAllRecords(limit, page int64, orderBy, orderDir string ) ([]entities.Record, error) {
 	offset := limit * (page -1)
 
-	query := fmt.Sprintf("SELECT id, temperature, distance FROM record ORDER BY %s %s LIMIT ? OFFSET ?", orderBy, orderDir)
+	query := fmt.Sprintf("SELECT id, temperature, humidity, gas_level FROM record ORDER BY %s %s LIMIT ? OFFSET ?", orderBy, orderDir)
 	stmt, err := r.DB.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
@@ -71,7 +71,7 @@ func (r *RecordRepository) GetAllRecords(limit, page int64, orderBy, orderDir st
 	var records []entities.Record
 	for rows.Next() {
 		var record entities.Record
-		err := rows.Scan(&record.ID, &record.Temperature, &record.Distance)
+		err := rows.Scan(&record.ID, &record.Temperature, &record.Humidity, &record.Gas_level)
 		if err != nil {
 			return nil, err
 		}
@@ -89,7 +89,7 @@ func (r *RecordRepository) GetAllRecords(limit, page int64, orderBy, orderDir st
 } 
 
 func (r *RecordRepository) GetRecordByID(id int64) (entities.Record, error) {
-	query := `SELECT id, temperature, distance FROM record WHERE id =?`
+	query := `SELECT id, temperature, humidity, gas_level FROM record WHERE id =?`
 
     stmt, err := r.DB.Prepare(query)
 
@@ -101,7 +101,7 @@ func (r *RecordRepository) GetRecordByID(id int64) (entities.Record, error) {
     row := stmt.QueryRow(id)
 
     var record entities.Record
-    err = row.Scan(&record.ID, &record.Temperature, &record.Distance)
+    err = row.Scan(&record.ID, &record.Temperature, &record.Humidity, &record.Gas_level)
 
     if err == sql.ErrNoRows {
         return entities.Record{}, fmt.Errorf("record not found")

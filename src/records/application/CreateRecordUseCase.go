@@ -16,10 +16,11 @@ func NewCreateRecordUseCase(recordRepositoty ports.IRecordRepository, kafkaRepos
 }
 
 
-func (r *CreateRecordUseCase) Run(Temperature, Distance float64) (entities.Record, error){
+func (r *CreateRecordUseCase) Run(Temperature, Humidity, Gas_level float64) (entities.Record, error){
 	record := entities.Record{
 		Temperature: Temperature,
-		Distance: Distance,
+		Humidity: Humidity,
+		Gas_level: Gas_level,
 	}
 
 	status, err := r.KafkaRepository.Producer(record)
