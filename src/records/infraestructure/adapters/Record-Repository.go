@@ -24,7 +24,7 @@ func NewRecordRepository() (*RecordRepository, error) {
 
 
 func (r *RecordRepository) Create(record entities.Record) (entities.Record, error) {
-	query := `INSERT INTO record (temperature, humidity, gas_level) VALUES (?, ?)`
+	query := `INSERT INTO records (temperature, humidity, gas_level) VALUES (?, ?, ?)`
 
 	stmt, err := r.DB.Prepare(query)
 
@@ -54,7 +54,7 @@ func (r *RecordRepository) Create(record entities.Record) (entities.Record, erro
 func (r *RecordRepository) GetAllRecords(limit, page int64, orderBy, orderDir string ) ([]entities.Record, error) {
 	offset := limit * (page -1)
 
-	query := fmt.Sprintf("SELECT id, temperature, humidity, gas_level FROM record ORDER BY %s %s LIMIT ? OFFSET ?", orderBy, orderDir)
+	query := fmt.Sprintf("SELECT id, temperature, humidity, gas_level FROM records ORDER BY %s %s LIMIT ? OFFSET ?", orderBy, orderDir)
 	stmt, err := r.DB.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
@@ -89,7 +89,7 @@ func (r *RecordRepository) GetAllRecords(limit, page int64, orderBy, orderDir st
 } 
 
 func (r *RecordRepository) GetRecordByID(id int64) (entities.Record, error) {
-	query := `SELECT id, temperature, humidity, gas_level FROM record WHERE id =?`
+	query := `SELECT id, temperature, humidity, gas_level FROM records WHERE id =?`
 
     stmt, err := r.DB.Prepare(query)
 

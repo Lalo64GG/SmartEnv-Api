@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/lalo64/SmartEnv-api/src/records/application"
+	"github.com/lalo64/SmartEnv-api/src/records/domain/entities"
 	"github.com/lalo64/SmartEnv-api/src/records/infraestructure/http/controllers/helpers"
 	"github.com/lalo64/SmartEnv-api/src/records/infraestructure/http/request"
 	"github.com/lalo64/SmartEnv-api/src/shared/responses"
@@ -45,9 +46,26 @@ func (ctr *CreateRecordController) Run(ctx *gin.Context){
 		return
 	}
 
-	// ctr.KafkaService.Producer(req.Temperature, req.Distance)
+	record := entities.Record{
+		Temperature: req.Temperature,
+		Humidity: req.Humidity,
+		Gas_level: req.Gas_level,
 
-	record, err := ctr.RecordController.Run(req.Temperature, req.Humedity, req.Gas_level)
+	}
+
+	success, error := ctr.KafkaService.Producer(record)
+
+	if error!= nil || !success {
+		ctx.JSON(http.StatusInternalServerError, responses.Response{
+			Success: false,
+			Message: "Error enviando el mensaje",
+			Data:    nil,
+			Error:   error.Error(),
+		})
+	}
+
+
+	record, err := ctr.RecordController.Run(req.Temperature, req.Humidity, req.Gas_level)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, responses.Response{

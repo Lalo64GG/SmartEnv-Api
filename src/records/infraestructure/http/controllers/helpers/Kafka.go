@@ -1,21 +1,32 @@
 package helpers
 
 import (
+	"encoding/json"
 	"fmt"
+
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+	"github.com/lalo64/SmartEnv-api/src/records/application/services"
 	"github.com/lalo64/SmartEnv-api/src/records/domain/entities"
 )
 
 type KafkaHelper struct {}
 
-func NewKafkaHelper() *KafkaHelper {
-	return &KafkaHelper{}
+func NewKafkaHelper() (services.KafkaService, error) {
+	return &KafkaHelper{}, nil
 }
 
 func (k *KafkaHelper) Producer(record entities.Record) (bool, error) {
+
+	recordJSON, err := json.Marshal(record)
+
+	if err != nil {
+		fmt.Printf("Error al serializar el registro: %v\n", err)
+		return false, err
+	}
+
 	//* Creamos un nuevo productor
 	p, err := kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": "localhost:9092",
+		"bootstrap.servers": "54.235.169.219:9092",
 	})
 
 	if err != nil {
@@ -51,7 +62,7 @@ func (k *KafkaHelper) Producer(record entities.Record) (bool, error) {
 			Topic:     &topic,
 			Partition: kafka.PartitionAny,
 		},
-		Value: []byte(fmt.Sprintf("%v", record)),
+		Value: recordJSON,
 	}, nil)
 
 	if err != nil {

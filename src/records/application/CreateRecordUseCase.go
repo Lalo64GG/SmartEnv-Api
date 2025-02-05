@@ -23,11 +23,11 @@ func (r *CreateRecordUseCase) Run(Temperature, Humidity, Gas_level float64) (ent
 		Gas_level: Gas_level,
 	}
 
-	status, err := r.KafkaRepository.Producer(record)
+	// status, err := r.KafkaRepository.Producer(record)
 
-	if err != nil || !status {
-		return entities.Record{}, err
-	}
+	// if err != nil || !status {
+	// 	return entities.Record{}, err
+	// }
 
 	newRecord, err := r.RecordRepository.Create(record)
 
