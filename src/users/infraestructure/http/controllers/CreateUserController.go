@@ -46,19 +46,8 @@ func (ctr *CreateUserController) Run(ctx *gin.Context) {
             return
 		}
 
-		hash, err := ctr.BcryptHelper.Encrypt([]byte(req.Password))
 
-		if err != nil {
-			    ctx.JSON(http.StatusInternalServerError, responses.Response{
-                    Success: false,
-                    Message: "Error encriptando la contraseña",
-                    Data:    nil,
-                    Error:   err.Error(),
-                })
-                return
-            }
-
-		user, err := ctr.CreateUserController.Run(req.Username, req.Email, hash)
+		user, err := ctr.CreateUserController.Run(req.Username, req.Email, req.Password)
 
 		if err != nil {
 
